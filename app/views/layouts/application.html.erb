@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Linker</title>
+  <title>URL Shortener DEMO App</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+<h1>URL shortener demo App. No more slashes!</h1>
+
+<h2>Makes use of wildcard subdomains *.<%=request.domain %></h2>
+<p> Would be even nicer when installed on a shorter 2nd level domain.</p>
+ <a href="/2048/">Play 2048 Game demo</a> 
+<% if user_signed_in? %>
+   | <%= link_to "Log out", destroy_user_session_path, :method => :delete %>
+<% else %>
+  <h2>User authorization is required to publish, manage and view click count for Your links.</h2>
+<% end %>
 
 <p class="notice"><%= notice %></p>
 <p class="alert"><%= alert %></p>
