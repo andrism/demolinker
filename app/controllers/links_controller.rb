@@ -18,7 +18,7 @@ class LinksController < ApplicationController
     link.increment!(:clicks)
     redirect_to link.url
    rescue
-    redirect_to "#{request.protocol}#{request.domain}#{([80,443].include? request.port) ? '' : ":#{request.port}"}"
+    redirect_to "#{request.protocol}#{request.domain}#{([80,443].include? request.port) ? '' : ":#{request.port}"}/links"
    end
   end
 
