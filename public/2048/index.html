@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>2048 Game demo</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="2048 Game demo" />
+		<meta name="keywords" content="2048 Game demo" />
+		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+		<script src="./2048-game-demo.js"></script>
+		<link rel="stylesheet" href="./2048-game-demo.css" />
+	</head>
+	<body>
+		<h1>2048 Game demo</h1>
+
+		<p><a href="/">to the URL Shortener app</a></p>
+		<p>Use arrow keys to play. <input id="restart_button" type="button" value="Restart" /></p>
+		
+		<div id="board_container">
+		</div>
+	
+		<p><a href="http://en.wikipedia.org/wiki/2048_%28video_game%29" target="_blank">Details at Wikipedia</a></p>
+
+	</body>
+	<script>
+			
+		var board = new Board ($('#board_container'));
+		
+		$(document).keydown(function(event) {board.do_move(event.keyCode);});
+	
+		$('#restart_button').click(function() { if (confirm('Restart the game?')) board.draw(); }); 
+
+	</script>
+</html>
