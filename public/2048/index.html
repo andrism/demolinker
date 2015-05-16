@@ -5,25 +5,32 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="description" content="2048 Game demo" />
 		<meta name="keywords" content="2048 Game demo" />
+		<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />
 		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+		<script src="./hammer.min.js"></script>
 		<script src="./2048-game-demo.js"></script>
 		<link rel="stylesheet" href="./2048-game-demo.css" />
 	</head>
 	<body>
-		<h1>2048 Game demo</h1>
-
-		<p><a href="/">to the URL Shortener app</a></p>
-		<p>Use arrow keys to play. <input id="restart_button" type="button" value="Restart" /></p>
-		
-		<div id="board_container">
+		<div class="header">
+			<p>Swipe or use arrow keys to play. <input id="restart_button" type="button" value="Restart" /></p>
 		</div>
-	
-		<p><a href="http://en.wikipedia.org/wiki/2048_%28video_game%29" target="_blank">Details at Wikipedia</a></p>
+		<div class="wrapper">
+			<div id="board_container">
+			</div>
+		</div>
+		<div class="footer">
+			<p>
+				<a href="/">URL Shortener</a> |
+				<a href="http://en.wikipedia.org/wiki/2048_%28video_game%29" target="_blank">2048 in Wikipedia</a>
+			</p>
+		</div>
 
 	</body>
 	<script>
-			
+	  $(function(){	
+
 		var board = new Board ($('#board_container'));
 		
 		$(document).keydown(function(event) {
@@ -32,7 +39,22 @@
 			}
 		});
 
+		var swiper= new Hammer($('#board_container')[0]);
+
+		swiper.get("swipe").set({ direction: Hammer.DIRECTION_ALL });
+		
+		swiper.on("swipeleft", function () { board.do_move('left'); });
+		swiper.on("swipeup", function () { board.do_move('up'); });
+		swiper.on("swiperight", function () { board.do_move('right'); });
+		swiper.on("swipedown", function () { board.do_move('down'); });
+
 		$('#restart_button').click(function() { if (confirm('Restart the game?')) board.draw(); }); 
 
+		$(window).resize(function(){
+		    $('#board_container').css({'font-size': Math.floor($('#board_container').height()/14)+'px'});
+		});
+		$(window).trigger('resize');
+
+	   });
 	</script>
 </html>
