@@ -20,7 +20,6 @@
 	  this.score_face = $('<div>Score: 0</div>').appendTo(this.face);
           this.score = 0;
           this.valid_move = false;
-          this.moving_to = false;
           this.winned = false;
 	  this.cells = [];
           this.blanks = [];
@@ -39,7 +38,7 @@
 	}
 
 	Board.prototype.pop_random_cell = function () {
-	  cell = this.blanks[Math.floor(Math.random() * this.blanks.length)]; 
+	  var cell = this.blanks[Math.floor(Math.random() * this.blanks.length)]; 
 	  if (cell) cell.fill(Math.round(1+Math.random())*2, '#ffc');
 	}
 
@@ -48,22 +47,40 @@
 	  this.score_face.text('Score: '+this.score);		  				
 	}
 
-	Board.prototype.finish_move = function () {
-          this.valid_move = false;
-	  for (var index in this.cells) {
-		this.cells[index].just_merged=false;
-	  }
-	  if (this.winned) alert("Congratulations, You win!");
+	Board.prototype.near_merges_possible = function () {
+	  for (var lane in this.cols) { if (this.rows[lane].near_merges_possible()) return true; }
+	  for (var lane in this.rows) { if (this.cols[lane].near_merges_possible()) return true; }
+	  return false;
+        }
 
-	  //TODO Add 'Game over' check this.blanks.length==0 and no option to merge
-	}
+	Board.prototype.do_move = function(direction) {
 
-	Board.prototype.do_move = function(key_code) {
-            var axis = { 38: 'cols', 40:'cols', 37:'rows', 39:'rows' }[key_code];
-	    var polarity = { 38: '', 40:'_backwards', 37:'', 39:'_backwards' }[key_code];
-            if (axis) for (lane in this[axis]) { this[axis][lane]['stack'+polarity](); }
-	    if (this.valid_move) this.pop_random_cell();
-	    this.finish_move();				
+	    var axis = { 'left':'rows', 'up':'cols', 'right':'rows', 'down':'cols'}[direction];
+	    var polarity = { 'left': '', 'up': '', 'right':'_backwards', 'down':'_backwards' }[direction];
+
+            if (axis) for (var lane in this[axis]) { this[axis][lane]['stack'+polarity](); }
+
+	    if (this.valid_move) {
+
+		  this.pop_random_cell();
+
+		  for (var index in this.cells) {
+
+			this.cells[index].just_merged=false;
+		  }
+
+		  if (this.winned) {
+
+			alert("Congratulations, You win!");
+		  }
+
+		  if (this.blanks.length < 1 && !this.near_merges_possible()) {
+
+			if (confirm("Sorry, game over. No more moves possible.")) { this.draw();}
+		  }
+
+		  this.valid_move = false;
+	    }				
 	}
 
 
@@ -78,6 +95,16 @@
 
 	Lane.prototype.add = function (cell) {
 	  this.cells.push(cell);
+	}
+
+	Lane.prototype.near_merges_possible = function () {
+	  for(var curr in this.cells) {
+	     var next = parseInt(curr)+1;
+             if (this.cells[curr] && this.cells[next] && this.cells[curr].value && (this.cells[curr].value == this.cells[next].value)) {
+		return true;
+	     }
+          }
+          return false;
 	}
 
 	Lane.prototype.get_source_for = function (target,action) {
