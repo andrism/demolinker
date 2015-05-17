@@ -14,43 +14,34 @@ No more slashes! Makes use of wildcard subdomains *.your.tld
 
 == Setup instructions:
 
-<tt>
-git clone https://github.com/andrism/demolinker.git
-cd demolinker
-bundle install
-rake db:migrate RAILS_ENV=production
-rake assets:precompile
-</tt>
+  git clone https://github.com/andrism/demolinker.git
+  cd demolinker
+  bundle install
+  rake db:migrate RAILS_ENV=production
+  rake assets:precompile
 
 == Minimum required app configuration
 
 in 'config/initializers/devise.rb'
 
-<tt>
-config.secret_key
-config.mail_sender
-</tt>
+  config.secret_key
+  config.mail_sender
 
 in 'config/environments/production.rb'
 
-<tt>
-config.action_mailer.default_url_options
-</tt>
+  config.action_mailer.default_url_options
 
 in 'config/secrets.yml'
 
-<tt>
-production:
-  secret_key_base:
-</tt>
+  production:
+    secret_key_base:
 
 == Depends on proper DNS and webserver server configuration
 
 Example of Bind DNS configuration file for your.tld zone:
 
-<tt>
-\$TTL 28800 ; (8 hours)
-your.tld        IN SOA  ns.your.tld. hostmaster.your.tld. (
+  $TTL 28800 ; (8 hours)
+  your.tld        IN SOA  ns.your.tld. hostmaster.your.tld. (
                                 2014072312 ; serial
                                 28800      ; refresh (8 hours)
                                 7200       ; retry (2 hours)
@@ -62,14 +53,12 @@ your.tld        IN SOA  ns.your.tld. hostmaster.your.tld. (
                         MX      10 mail.your-mail-provider.tld.
                         TXT     "v=spf1 mx ptr -all"
                         SPF     "v=spf1 mx ptr -all"
-\$ORIGIN your.tld.
-*            		A       10.0.0.10
-</tt>
+  $ORIGIN your.tld.
+  *            		A       10.0.0.10
 
 Example of Nginx virtual host configuration for your.tld zone:
 
-<tt>
-server {
+  server {
 
         listen          80;
         server_name   *.your.tld your.tld;
@@ -80,7 +69,6 @@ server {
         root            /prod/demolinker/public;
 	
 	passenger_enabled on
-}
-</tt>
+  }
 
 Good luck!
