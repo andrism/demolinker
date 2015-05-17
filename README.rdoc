@@ -67,8 +67,8 @@ Example of Nginx virtual host configuration for your.tld zone:
         error_log       /var/log/nginx/your.tld.error_log warn;
 
         root            /prod/demolinker/public;
-	
-        passenger_enabled on
+
+        passenger_enabled on;
   }
 
 Good luck!
