@@ -1,8 +1,8 @@
-== URL shortener demo App
+= URL shortener demo App
 
 No more slashes! Makes use of wildcard subdomains *.your.tld
 
-A bonus: mobile friendly 2048 game demo in folder: 'public/2048/' (using jquery,jquery-ui,hummer.js)
+* A bonus: mobile friendly 2048 game demo in folder: 'public/2048/' (using jquery,jquery-ui,hummer.js)
 
 * Ruby 2.2.2, Rails 4.2
 
@@ -12,7 +12,7 @@ A bonus: mobile friendly 2048 game demo in folder: 'public/2048/' (using jquery,
 
 * uses sqlite as database backend by default, but can be configured for any ActiveRecord adapters 
 
-Setup instructions:
+== Setup instructions:
 
 <tt>
 git clone https://github.com/andrism/demolinker.git
@@ -22,7 +22,7 @@ rake db:migrate RAILS_ENV=production
 rake assets:precompile
 </tt>
 
-* Minimum required app configuration
+== Minimum required app configuration
 
 in 'config/initializers/devise.rb'
 
@@ -44,12 +44,12 @@ production:
   secret_key_base:
 </tt>
 
-* Depends on proper DNS and webserver server configuration
+== Depends on proper DNS and webserver server configuration
 
 Example of Bind DNS configuration file for your.tld zone:
 
 <tt>
-$TTL 28800 ; (8 hours)
+\$TTL 28800 ; (8 hours)
 your.tld        IN SOA  ns.your.tld. hostmaster.your.tld. (
                                 2014072312 ; serial
                                 28800      ; refresh (8 hours)
@@ -62,7 +62,7 @@ your.tld        IN SOA  ns.your.tld. hostmaster.your.tld. (
                         MX      10 mail.your-mail-provider.tld.
                         TXT     "v=spf1 mx ptr -all"
                         SPF     "v=spf1 mx ptr -all"
-$ORIGIN your.tld.
+\$ORIGIN your.tld.
 *            		A       10.0.0.10
 </tt>
 
