@@ -1,28 +1,86 @@
-== README
+== URL shortener demo App
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+No more slashes! Makes use of wildcard subdomains *.your.tld
 
-Things you may want to cover:
+A bonus: mobile friendly 2048 game demo in folder: 'public/2048/' (using jquery,jquery-ui,hummer.js)
 
-* Ruby version
+* Ruby 2.2.2, Rails 4.2
 
-* System dependencies
+* uses 'devise' gem for user sign-in and sign-up
 
-* Configuration
+* uses 'active_scaffold' gem for interface
 
-* Database creation
+* uses sqlite as database backend by default, but can be configured for any ActiveRecord adapters 
 
-* Database initialization
+Setup instructions:
 
-* How to run the test suite
+<tt>
+git clone https://github.com/andrism/demolinker.git
+cd demolinker
+bundle install
+rake db:migrate RAILS_ENV=production
+rake assets:precompile
+</tt>
 
-* Services (job queues, cache servers, search engines, etc.)
+* Minimum required app configuration
 
-* Deployment instructions
+in 'config/initializers/devise.rb'
 
-* ...
+<tt>
+config.secret_key
+config.mail_sender
+</tt>
 
+in 'config/environments/production.rb'
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+<tt>
+config.action_mailer.default_url_options
+</tt>
+
+in 'config/secrets.yml'
+
+<tt>
+production:
+  secret_key_base:
+</tt>
+
+* Depends on proper DNS and webserver server configuration
+
+Example of Bind DNS configuration file for your.tld zone:
+
+<tt>
+$TTL 28800 ; (8 hours)
+your.tld        IN SOA  ns.your.tld. hostmaster.your.tld. (
+                                2014072312 ; serial
+                                28800      ; refresh (8 hours)
+                                7200       ; retry (2 hours)
+                                604800     ; expire (1 week)
+                                3600       ; minimum (1 hour)
+                                )
+                        NS      ns.your-dns-provider.tld.
+                        A       10.0.0.10
+                        MX      10 mail.your-mail-provider.tld.
+                        TXT     "v=spf1 mx ptr -all"
+                        SPF     "v=spf1 mx ptr -all"
+$ORIGIN your.tld.
+*            		A       10.0.0.10
+</tt>
+
+Example of Nginx virtual host configuration for your.tld zone:
+
+<tt>
+server {
+
+        listen          80;
+        server_name   *.your.tld your.tld;
+
+        access_log      /var/log/nginx/your.tld.access_log;
+        error_log       /var/log/nginx/your.tld.error_log warn;
+
+        root            /prod/demolinker/public;
+	
+	passenger_enabled on
+}
+</tt>
+
+Good luck!
